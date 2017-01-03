@@ -13,7 +13,10 @@
     "babel-runtime": "^6.0.0",
     "vue": "^2.0.0",
     "vue-resource": "^1.0.3",
-    "vue-router": "^2.0.3"
+    "vue-router": "^2.0.3",
+    "better-scroll":"^0.1.8",
+    "vuex":"^2.1.1"
+
   },
   "devDependencies": {
     "babel-core": "^6.0.0",

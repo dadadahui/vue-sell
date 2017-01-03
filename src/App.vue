@@ -16,13 +16,12 @@
             </div>
         </div>
         <!-- 路由匹配到的组件将渲染在这里 -->
-        <router-view></router-view>
+        <router-view :seller = "seller"></router-view>
     </div>
 </template>
 
 <script type="text/ecmascript-6">
-    import header from 'components/header/header.vue'
-
+    import header from 'components/header/header.vue';
     const ERR_OK = 0;//状态码
 
     export default {
@@ -37,10 +36,10 @@
             //this:vue组件实例
             this.$http.get('/api/seller').then((response) => {
                 response = response.body;
-                console.log('response.body:'+ response);
+                // console.log('response.body:'+ response);
                 if (response.errno === ERR_OK){
                     this.seller = response.data;
-                    console.log(this.seller);//Vue.js给加了get和set方法
+                    // console.log(this.seller);//Vue.js给加了get和set方法
                 }
             });
         },

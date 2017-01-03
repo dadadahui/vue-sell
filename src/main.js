@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import VueResource from 'vue-resource';
+// import store from 'vuex/store';
 import App from './App';
 import goods from 'components/goods/goods';
 import ratings from 'components/ratings/ratings';
@@ -35,7 +36,8 @@ const router = new VueRouter({
 const app = new Vue({
     el: '#app',
     router: router,
-    render: h => h(App)
+    render: h => h(App),
+    // store
 });
 
-router.push('/goods');
+// router.push('/goods');
