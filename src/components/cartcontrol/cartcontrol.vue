@@ -38,6 +38,7 @@
           }
           //派发事件
           // this.$dispatch('cart.add',event.target);
+          this.$emit('cart-add',event.target);
         },
         decreaseCart(event){
           if(!event._constructed){
@@ -70,14 +71,14 @@
       transition all 0.4s linear
       .inner
         display: inline-block
-        transition all 0.4s ease
+        /*transition all 0.4s ease*/
       &.move-enter,&.move-leave-active
-        transform translate3D(24px,0,0)
+        transform translate3d(24px,0,0)
+        /*.inner
+          transform rotate(180deg)*/
+      /*&.move-leave-active
         .inner
-          transform rotate(180deg)
-      &.move-leave-active
-        .inner
-          transform rotate(0)
+          transform rotate(0)*/
     .cart-count
       display: inline-block
       vertical-align top

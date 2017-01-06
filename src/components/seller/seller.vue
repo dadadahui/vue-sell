@@ -28,6 +28,10 @@
           </div>
         </li>
       </ul>
+      <div class="favorite" @click="toggleFavorite">
+        <span class="icon-favorite" :class="{'active':favorite}"></span>
+        <span class="text">{{favText}}</span>
+      </div>
     </div>
     <split></split>
     <div class="bulletin">
@@ -42,11 +46,30 @@
         </li>
       </ul>
     </div>
+    <split></split>
+    <div class="pics">
+      <h1 class="title">商家实景</h1>
+      <div class="pic-wrapper" ref="picWrapper">
+        <ul class="pic-list" ref="pic">
+          <li class="pic-item" v-for="pic in seller.pics">
+            <img :src="pic" width="120" height="90">
+          </li>
+        </ul>
+      </div>
+    </div>
+    <split></split>
+    <div class="info">
+      <h1 class="title border-1px">商家信息</h1>
+      <ul>
+        <li class="info-item" v-for="info in seller.infos">{{info}}</li>
+      </ul>
+    </div>
   </div>
 </div>
 </template>
 
 <script type="text/ecmascript-6">
+  import {saveToLocal,loadFromLocal} from 'common/js/store'
   import BScroll from "better-scroll";
   import star from "components/star/star"
   import split from "components/split/split";
@@ -57,12 +80,25 @@
         type:Object
       }
     },
+    data(){
+      return {
+        favorite:(()=>{
+          return loadFromLocal(this.seller.id,'favorite',false);
+        })()
+      }
+    },
+    computed:{
+      favText(){
+        return this.favorite ? '已收藏':'收藏';
+      }
+    },
     // 执行到created时候，不能保证DOM已经被渲染；
     //dom渲染后，才使用betterscroll
     watch:{
       'seller':function () {
         this.$nextTick(function () {
           this._initScroll();
+          this. _initPics();
         })}
     },
     created(){
@@ -71,9 +107,10 @@
     mounted:function () {
       this.$nextTick(function () {
        this._initScroll();
+        this. _initPics();
       })
-    },
 
+    },
     methods:{
       _initScroll(){
         if (!this.scroll){
@@ -83,6 +120,29 @@
         }else{
           this.scroll.refresh();
         }
+      },
+      _initPics(){
+        if (this.seller.pics){
+          let picWidth = 120;
+          let margin = 6;
+          let width = (picWidth + margin)*this.seller.pics.length-margin;
+
+          this.$refs.pic.style.width = width+'px';
+          this.$nextTick(()=>{
+            this.picScroll = new BScroll(this.$refs.picWrapper,{
+              scrollX:true,
+              // 横向滚动时，忽略外层垂直方向上的滚动
+              eventPassthrough:'vertical'
+            })
+          });
+        }
+      },
+      toggleFavorite(event){
+        if(!event._constructed){
+          return;
+        }
+        this.favorite = !this.favorite;
+        saveToLocal(this.seller.id,'favorite',this.favorite);
       }
     },
     components: {
@@ -102,6 +162,7 @@
     width:100%
     overflow: hidden
     .overview
+      position relative
       padding 18px
       .title
         margin-bottom 8px
@@ -147,6 +208,25 @@
               font-size 24px
 
 
+      .favorite
+        position absolute
+        width 50px
+        top: 18px
+        right: 11px
+        text-align center
+        .icon-favorite
+          display block
+          margin-bottom 4px
+          line-height: 24px;
+          font-size 24px
+          color: #d4d6d9
+          &.active
+            color: rgb(240,20,20)
+        .text
+          line-height: 10px;
+          font-size 10px
+          color: rgb(77, 85, 93)
+
     .bulletin
       padding 18px 18px 0 18px
       .title
@@ -185,11 +265,50 @@
             &.special
              bg-img('special_4')
           .text
-            font-size: 12px
             line-height: 16px
+            font-size: 12px
+            vertical-align: top
             color: rgb(7, 17, 27)
           &:last-child
             border-none()
+    .pics
+      padding: 18px
+      .title
+        margin-bottom 12px
+        line-height: 14px;
+        font-size 14px
+        color: rgb(7, 17, 27)
+      .pic-wrapper
+        width:100%
+        overflow: hidden
+        white-space nowrap
+        .pic-list
+          font-size 0
+          .pic-item
+            display: inline-block
+            margin-right 6px
+            width: 120px
+            height 90px
+            &:last-child
+              margin-right 0
+
+
+    .info
+      padding 18px 18px 0 18px
+      color: rgb(7,17,27)
+      .title
+        padding-bottom 8px
+        line-height: 14px;
+        font-size 14px
+        color: rgb(7, 17, 27)
+        border-1px(rgba(7,17,27,0.1))
+      .info-item
+        padding 16px 12px
+        line-height: 16px;
+        border-1px(rgba(7,17,27,0.1))
+        font-size 12px
+        &:last-child
+          border-none()
 
 
 </style>

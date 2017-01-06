@@ -1,6 +1,6 @@
 import Vue from 'vue';
-import VueRouter from 'vue-router';
-import VueResource from 'vue-resource';
+import VueRouter from 'vue-router';//官方路由
+import VueResource from 'vue-resource';//非官方的，发送ajax请求的一个库
 // import store from 'vuex/store';
 import App from './App';
 import goods from 'components/goods/goods';

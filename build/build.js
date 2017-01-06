@@ -4,7 +4,7 @@ env.NODE_ENV = 'production'
 
 var path = require('path')
 var config = require('../config')
-var ora = require('ora')
+var ora = require('ora')//给长时间异步任务的一些提示（打包过程中的转圈和文案，由它提供
 var webpack = require('webpack')
 var webpackConfig = require('./webpack.prod.conf')
 

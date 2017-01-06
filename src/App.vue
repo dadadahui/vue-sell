@@ -16,30 +16,43 @@
             </div>
         </div>
         <!-- 路由匹配到的组件将渲染在这里 -->
-        <router-view :seller = "seller"></router-view>
+      <keep-alive>
+        <router-view :seller = "seller" ></router-view>
+      </keep-alive>
     </div>
 </template>
 
 <script type="text/ecmascript-6">
+    import {urlParse} from 'common/js/utils'
     import header from 'components/header/header.vue';
     const ERR_OK = 0;//状态码
 
     export default {
         //vue.js中，规定data是一个函数，因为组件，方便复用
-        data() {//es6,风格规范
+        data() {
             return {
-                seller: {}
+                seller: {
+                  id:(()=>{
+                    //a Object
+                    let queryParam = urlParse();
+                    return queryParam.id;
+                  }
+                )()
+                }
             };
         },
-        //父组件ajax,再传给子组件
+      //相当于扩展了this.seller的属性，先放在一个空对象里，再给seller
+
+      //父组件ajax,再传给子组件
         created(){
             //this:vue组件实例
-            this.$http.get('/api/seller').then((response) => {
+            this.$http.get('/api/seller/?id='+this.seller.id).then((response) => {
                 response = response.body;
                 // console.log('response.body:'+ response);
                 if (response.errno === ERR_OK){
-                    this.seller = response.data;
-                    // console.log(this.seller);//Vue.js给加了get和set方法
+                    // this.seller = response.data;
+                  this.seller = Object.assign({},this.seller,response.data);
+                  // console.log(this.seller.id)
                 }
             });
         },

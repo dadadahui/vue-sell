@@ -30,7 +30,7 @@
                     <span class="now">¥{{food.price}}</span><span v-show="food.oldPrice" class="old">￥{{food.oldPrice}}</span>
                   </div>
                   <div class="cartcontrol-wrapper">
-                    <cartcontrol :food = "food" ></cartcontrol>
+                    <cartcontrol @cart-add="_drop" :food = "food" ></cartcontrol>
                   </div>
                 </div>
               </div>
@@ -40,7 +40,7 @@
       </ul>
     </div>
     <!--绑定，子组件用props接收-->
-    <shopcart ref:shopcart :select-foods="selectFoods" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
+    <shopcart ref="shopcart" :select-foods="selectFoods" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
     <food :food="selectedFood" ref='food'></food>
   </div>
 </template>
@@ -165,12 +165,12 @@
         shopcart,
         cartcontrol,
         food
-      },
-      events:{
-        'cart.add'(target){
-          this._drop(target);
-        }
       }
+      // events:{
+      //   'cart.add'(target){
+      //     this._drop(target);
+      //   }
+      // }
     }
 
 
